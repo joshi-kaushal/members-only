@@ -7,6 +7,13 @@ const { validationResult } = require('express-validator');
 const User = require('../models/user')
 const Post = require('../models/post')
 
+exports.get_home = function(req, res) {
+	 Post.find()
+        .populate('user')
+        .then((posts) => {
+            res.render('index', { title: 'Home', posts });
+        })
+}
 
 exports.login_get = function(req, res) {				// DONE
 	res.render('login', { title: 'Log-in' } )
@@ -51,12 +58,26 @@ exports.signup_post = function(req, res, next) {		// DONE
 
 
 exports.newpost_get = function(req, res) {				// DONE
-	res.render('newPost', { title: 'New Post', temp: 'TEST'})
+	res.render('newPost', { title: 'New Post' })
 }
 
 
-exports.newpost_post = function(req, res) {
-	res.render('', { title: '', temp: ''})
+exports.newpost_post = function(req, res, err) {		// DONE
+	const { title, post } = req.body
+
+	const errors = validationResult(req)
+	if(!errors.isEmpty()) {
+		res.render('newPost', { title: "ERROR NEW POST", post: post, errors: errors.array() })
+	}
+
+	const newPost = new Post({
+		title: title,
+		timestamp: moment().format('MMMM Do YYYY [at] HH:mm:signup_post'),
+		author: req.user.id 
+	}).save(err => {
+		if(err) { return next(err)}
+		res.redirect('/')
+	})
 }
 
 

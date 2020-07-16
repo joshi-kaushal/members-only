@@ -22,15 +22,15 @@
 </div>
 
 <div class='posts'>
-	{{#each post}}
+	{{#each posts}}
 		<div class="card border-dark mb-3" style="max-width: 18rem;">
 		  <div class="card-header bg-transparent border-success">{{user.fullname}}</div>
 		  <div class="card-body text-success">
-		    <h5 class="card-title">{{ post.title}}</h5>
-		    <p class="card-text">{{ post.post }}</p>
+		    <h5 class="card-title">{{ posts.title}}</h5>
+		    <p class="card-text">{{ posts.post }}</p>
 		  </div>
 		  <div class="card-footer bg-transparent border-success">
-		  	{{post.timestamp}}
+		  	{{posts.timestamp}}
 		  	{{#if user.admin}}
 		  		<a class='text-danger font-bold' href='/{{id}}/delete' data-toggle="tooltip" data-placement="left" title="Delete">(X)</a>
 		  	{{/if}}
