@@ -1,0 +1,40 @@
+<div class="container">
+{{#if user}}
+    <h3> Welcome,
+    	<span class='font-weight-bold'>{{ user.fullname }}</span> !
+    	{{#if user.admin}}
+    		Status: Admin!
+    	{{else}}
+    	 {{#if user.member}}
+    		 Status: Member!
+    	 {{/if}}
+    	{{/if}}
+    </h3>
+
+{{else}}
+
+<div class="alert alert-light m-1" role="alert">
+	<h3 class='alert alert-white d-inline m-2'>Don't be a guess... come, join us!</h3>
+   	<button class="btn btn-outline-dark d-inline m-2"><a class='text-dark font-bold' href='/login'>Login</a> </button>
+   	<button class="btn btn-outline-dark d-inline m-2"><a class='text-dark font-bold' href='/signup'>Sign-up</a> </button>
+</div>	
+{{/if}}
+</div>
+
+<div class='posts'>
+	{{#each post}}
+		<div class="card border-dark mb-3" style="max-width: 18rem;">
+		  <div class="card-header bg-transparent border-success">{{user.fullname}}</div>
+		  <div class="card-body text-success">
+		    <h5 class="card-title">{{ post.title}}</h5>
+		    <p class="card-text">{{ post.post }}</p>
+		  </div>
+		  <div class="card-footer bg-transparent border-success">
+		  	{{post.timestamp}}
+		  	{{#if user.admin}}
+		  		<a class='text-danger font-bold' href='/{{id}}/delete' data-toggle="tooltip" data-placement="left" title="Delete">(X)</a>
+		  	{{/if}}
+		  </div>
+		</div>
+	{{/each}}
+</div>
