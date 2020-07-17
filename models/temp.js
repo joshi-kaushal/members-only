@@ -34,17 +34,17 @@ exports.get_newpost = function(req, res) {
 }
 
 exports.post_newpost = function(req, res) {
-	const { title, post } = req.body
+	const { title, content } = req.body
 	const errors = validationResult(req)
 
 	if(!errors.isEmpty) {
-		res.render('newPost', { title: title, post: post, errors: errors.array() })
+		res.render('newPost', { title: title, content: content, errors: errors.array() })
 	}
 
 	const newPost = new Post({
 		author: req.user.id,
 		title: title,
-		post: post,
+		content: content,
 		timestamp: moment().format('MMMM Do YYYY, h:mm:ss a')
 	}).save(err => {
             if (err) { return next(err); };
@@ -52,3 +52,26 @@ exports.post_newpost = function(req, res) {
       });
 }
 
+// controller.js -> post signup
+
+
+	// bcrypt.hash(passowrd, 10, (err, hashedPassword) => {
+	// 	if(err) { return next(err) }
+		
+	// 	const newUser = new User({
+	// 		firstName: firstName,
+	// 		lastName: lastName,
+	// 		username: username,
+	// 		passowrd: hashedPassword,
+	// 		member: false,
+	// 		admin: false
+	// 	})
+
+	// 	console.log(`NEW USER ABOUT TO BE SAVED: \n ${newUser}`)
+	// 	newUser.save(err => {
+	// 		if(err) { return next(err) }
+	// 		res.redirect('/login')
+	// 		console.log(`NEW USER SAVED: \n ${newUser}`)
+	// 	})
+
+	// })

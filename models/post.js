@@ -4,7 +4,7 @@ const Schema = mongoose.Schema
 let PostSchema = new Schema ({
 	author: { type: Schema.Types.ObjectId, ref: 'fullName' },
 	title: { type: String, required: true, minlength: 6, maxlength: 20 },
-	post: { type: String, required: true, minlength: 6 },
+	content: { type: String, required: true, minlength: 6 },
 	timestamp: { type: Date, required: true }
 })
 

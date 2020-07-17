@@ -20,40 +20,45 @@ exports.login_get = function(req, res) {				// DONE
 }
 
 // TODO: DELETE
-exports.login_post = function(req, res) {				
-	res.render('login', { title: 'Log-in' })
-}
+// exports.login_post = function(req, res) {				
+// 	res.render('login', { title: 'Log-in' })
+// }
 
 
 exports.signup_get = function(req, res) {				// DONE
 	res.render('signup', { title: 'Sign-up' })
 }
 
-exports.signup_post = function(req, res, next) {		// DONE
-	const { firstName, lastName, username, passowrd } = req.body
+exports.signup_post = async function(req, res, next) {		// DONE
+	const { firstName, lastName, username, password } = req.body
 	const errors = validationResult(req)
 
 	if(!errors.isEmpty()) {
-		res.render('signup', { errors: errors.array() })
+		res.render('signup', { errors: errors.errors })
 	}
 	
-	bcrypt.hash(passowrd, 10, (err, hashedPassword) => {
-		if(err) { return next(err) }
-		
-		const newUser = new User({
-			firstName: firstName,
-			lastName: lastName,
-			username: username,
-			passowrd: passowrd,
-			member: false,
-			admin: false
-		}).save(err => {
-			if(err) { return next(err) }
-			redirect('/login')
-		})
+	hashedPassword = await bcrypt.hash(password, 2);
+    const newUser = new User({
+      firstName,
+      lastName,
+      username,
+      password: hashedPassword,
+      member: false,
+      admin: false
+    });
 
-	})
-	console.log(req.body)
+    console.log(newUser)
+    newUser.save(err => {
+      if (err) {
+        if (err.code === 11000) {
+          //req.flash("error_msg", `Username already registered, please login`);
+          return res.redirect("/login");
+        } else return next(err);
+      }
+      //req.flash("success_msg", "Registration Successful. Please login.");
+      res.redirect("/login");
+    });	
+
 }
 
 
@@ -62,20 +67,24 @@ exports.newpost_get = function(req, res) {				// DONE
 }
 
 
-exports.newpost_post = function(req, res, err) {		// DONE
-	const { title, post } = req.body
+exports.newpost_post = function(req, res, next) {		// DONE
+	const { title, content } = req.body
 
 	const errors = validationResult(req)
 	if(!errors.isEmpty()) {
-		res.render('newPost', { title: "ERROR NEW POST", post: post, errors: errors.array() })
+		res.render('newPost', { title: "ERROR NEW POST", errors: errors.array() })
 	}
 
 	const newPost = new Post({
+		author: req.params.id,
 		title: title,
-		timestamp: moment().format('MMMM Do YYYY [at] HH:mm:signup_post'),
-		author: req.user.id 
-	}).save(err => {
-		if(err) { return next(err)}
+		content: content,
+		timestamp: moment().format('MMMM Do YYYY [at] HH:mm:ss'),
+	})
+
+	console.log(`\n THE POST WAS: \n ${newPost}`)
+	newPost.save(err => {
+		if(err) { return next(err) }
 		res.redirect('/')
 	})
 }
@@ -89,7 +98,7 @@ exports.members_post = function(req, res) {				// DONE
 	const errors = validationResult(req)
 
 	if(!errors.isEmpty()){
-		res.render('become_member', { title: 'Become a member',errors: errors.array() })
+		res.render('become_member', { title: 'Become a member', errors: errors.errors })
 	}
 
 	const becomeMember = new User({

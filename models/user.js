@@ -6,7 +6,7 @@ let UserSchema = new Schema({
 	firstName: { type: String, required: true, minlength: 2, maxlength: 20},
 	lastName: { type: String, required: true, minlength: 2, maxlength: 20},
 	username: { type: String, required: true, minlength: 4, maxlength: 20},
-	password: { type: String, required: true, minlength: 8, maxlength: 20},
+	password: { type: String, required: true, minlength: 8},
 	member: { type: Boolean, required: true },
 	admin: { type: Boolean, required: true },
 	messeges: [{ type: Schema.Types.ObjectId, ref:'Post'}]

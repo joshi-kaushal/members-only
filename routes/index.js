@@ -14,32 +14,38 @@ router.get('/', function(req, res) {
   res.render('index', { title: 'members-only' });
 });
 
-	/* LOGIN */
+	/* LOGIN */	
 router.get('/login', controller.login_get)
 
-router.post(
-	'/login',
-	passport.authenticate('local', {
-		successRedirect: '/',
-		failureaRedirect: '/login',
-		failureFlash: true
-	})
-)
+// router.post(
+// 	'/login',
+// 	passport.authenticate('local', {
+// 		successRedirect: '/',
+// 		failureaRedirect: '/login'
+// 	})
+// )
 
+router.post(
+  '/login',
+  passport.authenticate('local', { 
+  	successRedirect: '/new-post',
+    failureRedirect: '/signup'
+  })
+);
 
 	/* SIGNUP */
 router.get('/signup', controller.signup_get)
 
 router.post('/signup', [
-	check('first-name', 'First name must be at least 2 characters long.')
+	check('firstName', 'First name must be at least 2 characters long.')
 		.isLength({ min: 2, max: 20 }).escape(),
-	check('last-name', 'Last name must be at least 2 characters long.')
+	check('lastName', 'Last name must be at least 2 characters long.')
 		.isLength({ min: 2, max: 20 }).escape(),
 	check('username', 'Username must be at least 4 characters long')
 		.isLength({ min: 4, max: 20 }).escape(),
-	check('password', 'Passowrd must be at least 6 characters long')
-		.isLength({ min: 4, max: 20 }).escape(),
-	check('confirm-password', 'Passowrd must match.')
+	check('password', 'Passowrd must be at least 8 characters long')
+		.isLength({ min: 8, max: 20 }).escape(),
+	check('confirmPassword', 'Passowrd must match.')
 		.custom( (val, {req} ) => val === req.body.password)
 	],
 	controller.signup_post
@@ -49,17 +55,14 @@ router.post('/signup', [
 	/* NEW MESSAGE */
 router.get('/new-post', controller.newpost_get)
 
-router.post(
-	'/new-post',
-	[
-		check('title', "Title must be atleast 6 characters long.")
-			.isLength({ min: 6, max: 20 })
-			.escape().not().isEmpty(),
-		check('post', "Post must be atleast 6 characters long.")
-			.isLength({ min: 6})
-			.escape().not().isEmpty()
-	],
-	controller.newpost_post)
+router.post('/new-post', [
+        check('title', 'Title must be at least 3 characters long')
+            .isLength({ min: 3, max: 30 })
+            .escape(),
+        check('content', 'You must send a comment').not().isEmpty().escape(),
+    ],
+	controller.newpost_post
+)
 
 
 	/* MEMBER */
