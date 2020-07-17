@@ -1,7 +1,7 @@
 const express = require('express')
-const async = require('async')
-const moment = require('moment')
 const bcrypt = require('bcryptjs')
+const moment = require('moment')
+const async = require('async')
 const { validationResult } = require('express-validator');
 
 const User = require('../models/user')
@@ -15,21 +15,17 @@ exports.get_home = function(req, res) {
         })
 }
 
-exports.login_get = function(req, res) {				// DONE
+exports.login_get = function(req, res) {				
 	res.render('login', { title: 'Log-in' } )
 }
 
-// TODO: DELETE
-// exports.login_post = function(req, res) {				
-// 	res.render('login', { title: 'Log-in' })
-// }
+// No need for login_post since the necessary work is done in index.js
 
-
-exports.signup_get = function(req, res) {				// DONE
+exports.signup_get = function(req, res) {				
 	res.render('signup', { title: 'Sign-up' })
 }
 
-exports.signup_post = async function(req, res, next) {		// DONE
+exports.signup_post = async function(req, res, next) {		
 	const { firstName, lastName, username, password } = req.body
 	const errors = validationResult(req)
 
@@ -51,28 +47,28 @@ exports.signup_post = async function(req, res, next) {		// DONE
     newUser.save(err => {
       if (err) {
         if (err.code === 11000) {
-          //req.flash("error_msg", `Username already registered, please login`);
           return res.redirect("/login");
         } else return next(err);
       }
-      //req.flash("success_msg", "Registration Successful. Please login.");
       res.redirect("/login");
     });	
 
 }
 
 
-exports.newpost_get = function(req, res) {				// DONE
+exports.newpost_get = function(req, res) {				
 	res.render('newPost', { title: 'New Post' })
 }
 
 
-exports.newpost_post = function(req, res, next) {		// DONE
+exports.newpost_post = function(req, res, next) {		
 	const { title, content } = req.body
+	console.log(req.body)
 
 	const errors = validationResult(req)
 	if(!errors.isEmpty()) {
-		res.render('newPost', { title: "ERROR NEW POST", errors: errors.array() })
+		res.render('newPost', { title: "New Post", errors: errors.array() })
+		return
 	}
 
 	const newPost = new Post({
@@ -90,34 +86,39 @@ exports.newpost_post = function(req, res, next) {		// DONE
 }
 
 
-exports.members_get = function(req, res) {				// DONE
+exports.members_get = function(req, res) {				
 	res.render('become_member', { title: 'Become a member'})
 }
 
-exports.members_post = function(req, res) {				// DONE
-	const errors = validationResult(req)
+exports.members_post = function(req, res) {				
+	if(req.body.password === 'bruhmintosh') {
 
-	if(!errors.isEmpty()){
-		res.render('become_member', { title: 'Become a member', errors: errors.errors })
+		const errors = validationResult(req)
+		if(!errors.isEmpty()){
+			res.render('become_member', { title: 'Become a member', errors: errors.errors })
+		}
+
+		const becomeMember = new User({
+			id: req.body.id,
+			member: true
+		})
+
+		User.findByIdAndUpdate(req.user.id, becomeMember).then(updated => {
+			res.redirect('/')
+		})
+		return
+	} else {
+		res.render('become_member', { title: 'become a member', errors: ['wrong password!', 'tried bruhmintosh?'] })
 	}
-
-	const becomeMember = new User({
-		member: true
-	})
-
-	User.findByIdAndUpdate(req.user.id, becomeMember).then(updated => {
-		res.redirect('/')
-	})
-
 }
 
 
-exports.admins_get = function(req, res) {				// DONE
+exports.admins_get = function(req, res) {				
 	res.render('become_admin', { title: 'Become an admin' })
 }
 
 
-exports.admins_post = function(req, res) {				// DONE
+exports.admins_post = function(req, res) {				
 	
 	const errors = validationResult(req)
 	if(!errors.isEmpty()) {
@@ -134,7 +135,7 @@ exports.admins_post = function(req, res) {				// DONE
 }
 
 
-exports.delete_get = function(req, res) {				// DONE
+exports.delete_get = function(req, res) {				
 
 	const errors = validationResult(req)
 	if(!errors.isEmpty()) {
@@ -147,7 +148,7 @@ exports.delete_get = function(req, res) {				// DONE
 }
 
 
-exports.logout = function(req, res) {					// DONE
+exports.logout = function(req, res) {					
 	req.logout('/')
 	res.redirect('/login')
 }

@@ -24,7 +24,7 @@ const mongoDb = 'mongodb+srv://jk_facebook-clone:quHAYe2Z9RD2Vckj@cluster0.djwid
 mongoose.connect(mongoDb, { useNewUrlParser: true, useUnifiedTopology: true});
 const db = mongoose.connection
 db.on('error', console.error.bind(console, 'MongoDB connection error:'))
-
+mongoose.set('useFindAndModify', false);
 // passport library functions
 passport.use(
     new LocalStrategy(function (username, password, done) {

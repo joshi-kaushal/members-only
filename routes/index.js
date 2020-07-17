@@ -1,8 +1,8 @@
 var express = require('express');
 var router = express.Router();
 
-const { check } = require('express-validator');
 const passport = require('passport')
+const { check } = require('express-validator');
 
 const User = require('../models/user')
 const Post = require('../models/post')
@@ -16,14 +16,6 @@ router.get('/', function(req, res) {
 
 	/* LOGIN */	
 router.get('/login', controller.login_get)
-
-// router.post(
-// 	'/login',
-// 	passport.authenticate('local', {
-// 		successRedirect: '/',
-// 		failureaRedirect: '/login'
-// 	})
-// )
 
 router.post(
   '/login',
@@ -72,8 +64,9 @@ router.get(
 router.post(
 	'/members',
 	[
-		check('password', "Did you try 'niggargatta' ?")
-			.custom( (val, {req} ) => val === req.body.password)
+		check('password', "Did you try 'bruhmintosh' ?")
+			.exists()
+			.trim()
 			.escape()
 	],
  	controller.members_post
@@ -100,12 +93,3 @@ router.get('/:id/delte', controller.delete_get)
 router.get('/logout', controller.logout)
 
 module.exports = router;
-
-/*
-home
-login
-signup
-new message
-make member
-make admin
-logout */
