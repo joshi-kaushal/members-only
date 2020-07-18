@@ -10,9 +10,11 @@ const controller = require('../controllers/controller')
 
 
 	/* GET HOME */
-router.get('/', function(req, res) {
-  res.render('index', { title: 'members-only' });
-});
+// router.get('/', function(req, res) {
+//   res.render('index', { title: 'members-only' });
+// });
+
+router.get('/', controller.get_home)
 
 	/* LOGIN */	
 router.get('/login', controller.login_get)

@@ -8,11 +8,11 @@ const User = require('../models/user')
 const Post = require('../models/post')
 
 exports.get_home = function(req, res) {
-	 Post.find()
+	Post.find()
         .populate('user')
-        .then((posts) => {
-            res.render('index', { title: 'Home', posts });
-        })
+        .then((post) => {
+            res.render('index', { title: 'Chad', post });
+    })
 }
 
 exports.login_get = function(req, res) {				
@@ -31,6 +31,7 @@ exports.signup_post = async function(req, res, next) {
 
 	if(!errors.isEmpty()) {
 		res.render('signup', { errors: errors.errors })
+		return
 	}
 	
 	hashedPassword = await bcrypt.hash(password, 2);
@@ -71,17 +72,18 @@ exports.newpost_post = function(req, res, next) {
 		return
 	}
 
+	let currentTime = Date()
 	const newPost = new Post({
-		author: req.params.id,
+		user: req.user.id,
 		title: title,
 		content: content,
-		timestamp: moment().format('MMMM Do YYYY [at] HH:mm:ss'),
+		timestamp: currentTime
 	})
 
 	console.log(`\n THE POST WAS: \n ${newPost}`)
 	newPost.save(err => {
 		if(err) { return next(err) }
-		res.redirect('/')
+		res.render('index', { title: "MeMb3r$", post: newPost })
 	})
 }
 
@@ -96,6 +98,7 @@ exports.members_post = function(req, res) {
 		const errors = validationResult(req)
 		if(!errors.isEmpty()){
 			res.render('become_member', { title: 'Become a member', errors: errors.errors })
+			return
 		}
 
 		const becomeMember = new User({
@@ -123,6 +126,7 @@ exports.admins_post = function(req, res) {
 	const errors = validationResult(req)
 	if(!errors.isEmpty()) {
 		res.render('/become_admin', { title: 'Become an admin', errors: errors.array() })
+		return
 	}
 
 	const becomeAdmin = new User ({

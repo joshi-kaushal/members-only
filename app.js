@@ -25,6 +25,7 @@ mongoose.connect(mongoDb, { useNewUrlParser: true, useUnifiedTopology: true});
 const db = mongoose.connection
 db.on('error', console.error.bind(console, 'MongoDB connection error:'))
 mongoose.set('useFindAndModify', false);
+
 // passport library functions
 passport.use(
     new LocalStrategy(function (username, password, done) {
@@ -69,6 +70,15 @@ app.use(session({ cookie: { maxAge: 60000 },
                   saveUninitialized: false
                 })
 );
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.use(function(req, res, next) {
+  res.locals.currentUser = req.user;
+  next();
+});
+
 app.use(passport.initialize());
 app.use(passport.session());
 

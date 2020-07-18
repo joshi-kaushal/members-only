@@ -1,38 +1,42 @@
 <div class='display-4 p-1 text-center font-weight-bold text-uppercase text-white' style='font-family: serif;'>
-{{title}}
+    {{title}}
 </div>
 
+{{#if currentUser}}
 <div class='container rounded border border-light mx-auto m-2' style='width:500px'>
-	<form class='form' action="" method="POST">
-		<div class="form-group font-weight-bold text-white text-uppercase text-center p-2">
-			<label for='title'>Title: </label>
-			<input type='text' id='title' class='form-control' value='{{ post.title }}'>
-		</div>
+    <form class='form' method="POST">
+        <div class="form-group font-weight-bold text-white text-uppercase text-center p-2">
+            <label for='title'>Title: </label>
+            <input type='text' id='title' name='title' class='form-control'>
+        </div>
 
-		<div class='form-group font-weight-bold text-white text-uppercase text-center p-2'>
-			<label for='content'>Content: </label>
-			<textarea type='text' id='content' class='form-control' rows='4' style='resize:none;'> {{ content }}</textarea>
-		</div>
+        <div class='form-group font-weight-bold text-white text-uppercase text-center p-2'>
+            <label for='content'>Content: </label>
+            <textarea type='text' id='content' name='content' class='form-control' rows='4' style='resize:none;'></textarea>
+        </div>
 
-		<div class='form-group d-flex justify-content-center text-center'>
-			<button type='submit' class='btn btn-outline-light'>Post</button>
-		</div>
-	</form>
+        <div class='form-group d-flex justify-content-center text-center'>
+            <button type='submit' class='btn btn-outline-light'>Post</button>
+        </div>
+    </form>
 </div>
 
 </div>
-
 
 <div class='mx-auto p-2 m-2 text-white' style='width:500px'>
-{{#if errors}}
-	<ul style='list-style=none;'>
-	{{#each errors}}
-		<li>{{msg}}</li>
-	{{/each}}
-	</ul>
-{{else}}
-	<ul style='list-style: none;'>
-		<li>Good to go!</li>
-	</ul>
-{{/if}}
+    {{#if errors}}
+    <ul style='list-style=none;'>
+        {{#each errors}}
+        <li>{{msg}}</li>
+        {{/each}}
+    </ul>
+    {{else}}
+    <ul style='list-style: none;'>
+        <li>Good to go!</li>
+    </ul>
+    {{/if}}
 </div>
+
+{{ else }}
+<h2>You need to Log-in!</h2>
+{{/if}}

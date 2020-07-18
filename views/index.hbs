@@ -1,11 +1,11 @@
 <div class="container">
-{{#if user}}
+{{#if currentUser}}
     <h3> Welcome,
-    	<span class='font-weight-bold'>{{ user.fullname }}</span> !
-    	{{#if user.admin}}
+	<span class='font-weight-bold'>{{ currentUser.fullName }}</span> !
+    	{{#if currentUser.admin}}
     		Status: Admin!
     	{{else}}
-    	 {{#if user.member}}
+    	 {{#if currentUser.member}}
     		 Status: Member!
     	 {{/if}}
     	{{/if}}
@@ -21,17 +21,17 @@
 {{/if}}
 </div>
 
-<div class='posts'>
-	{{#each posts}}
-		<div class="card border-dark mb-3" style="max-width: 18rem;">
-		  <div class="card-header bg-transparent border-success">{{user.fullname}}</div>
+<div class='post'>
+	{{#each post}}
+		<div class="card border-dark mb-3" style="max-width: 20rem; display: inline-block;">
+		  <div class="card-header bg-transparent border-success">{{user.fullName}}</div>
 		  <div class="card-body text-success">
-		    <h5 class="card-title">{{ posts.title}}</h5>
-		    <p class="card-text">{{ posts.post }}</p>
+		    <h5 class="card-title">{{ title}}</h5>
+		    <p class="card-text">{{ content }}</p>
 		  </div>
 		  <div class="card-footer bg-transparent border-success">
-		  	{{posts.timestamp}}
-		  	{{#if user.admin}}
+		  	{{timestamp}}
+		  	{{#if currentUser.admin}}
 		  		<a class='text-danger font-bold' href='/{{id}}/delete' data-toggle="tooltip" data-placement="left" title="Delete">(X)</a>
 		  	{{/if}}
 		  </div>

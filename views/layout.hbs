@@ -36,7 +36,11 @@
                         <a class="nav-link" href='/new-post'>New Post</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/logout">Log Out</a>
+                        {{#if currentUser}}
+                            <a class="nav-link" href="/logout">Log Out</a>
+                        {{else}}
+                            <a class="nav-link" href="/login">Log In</a>
+                        {{/if}}
                     </li>
                 </ul>
             </div>
@@ -51,3 +55,10 @@
 </body>
 
 </html>
+
+
+{{#if currentUser}}
+
+{{else}}
+
+{{/if}}
