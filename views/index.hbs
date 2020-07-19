@@ -1,15 +1,21 @@
 <div class="container">
 {{#if currentUser}}
-    <h3> Welcome,
-	<span class='font-weight-bold'>{{ currentUser.fullName }}</span> !
-    	{{#if currentUser.admin}}
-    		Status: Admin!
-    	{{else}}
-    	 {{#if currentUser.member}}
-    		 Status: Member!
-    	 {{/if}}
-    	{{/if}}
-    </h3>
+    <div class='bg-info'>
+		<div class='class='d-inline text-white font-weight-bold'> Welcome,
+		<div>{{ currentUser.fullName }}</div>!
+		<div class='class='d-inline text-right'>
+			[ Status:
+		    	{{#if currentUser.admin}}
+		    		<span class='text-danger'>Admin</span>
+		    	{{else}}
+		    	 {{#if currentUser.member}}
+		    		<span class='text-warning'>Member</span>
+		    	 {{/if}}
+		    	{{/if}}
+		    ]
+		</div>
+	    </div>
+	</div>
 
 {{else}}
 
@@ -24,17 +30,27 @@
 <div class='post'>
 	{{#each post}}
 		<div class="card border-dark mb-3" style="max-width: 20rem; display: inline-block;">
-		  <div class="card-header bg-transparent border-success">{{user.fullName}}</div>
-		  <div class="card-body text-success">
-		    <h5 class="card-title">{{ title}}</h5>
+		 
+		  <div class="card-header bg-transparent border-success">
+		  	{{#if user}}
+		  		{{ user.fullName }}
+		  	{{else}}
+		  		anon
+		  	{{/if}}
+		  </div>
+
+		  <div class="card-body text-dark">
+		    <h5 class="card-title" style='font-family: sans-serif;'>{{ title }}</h5>
 		    <p class="card-text">{{ content }}</p>
 		  </div>
-		  <div class="card-footer bg-transparent border-success">
-		  	{{timestamp}}
-		  	{{#if currentUser.admin}}
-		  		<a class='text-danger font-bold' href='/{{id}}/delete' data-toggle="tooltip" data-placement="left" title="Delete">(X)</a>
-		  	{{/if}}
+
+		  <div class="card-footer bg-transparent border-dark">
+		  	{{ timestamp }}	
+		  	{{#if @root.currentUser.admin}}
+    			<a class='text-danger font-bold' href="/{{id}}/delete" data-toggle="tooltip" data-placement="left" title="Delete">DELETE (X)</a>
+    	    {{/if}}
 		  </div>
 		</div>
 	{{/each}}
 </div>
+

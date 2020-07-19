@@ -8,7 +8,5 @@ let PostSchema = new Schema ({
 	timestamp: { type: Date, required: true }
 })
 
-// Virtual
-
 // Export
 module.exports = mongoose.model('Post', PostSchema)
