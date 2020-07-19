@@ -23,6 +23,14 @@
 
 </div>
 
+{{ else }}
+<div class='dispay-5 p-3 text-center font-weight-bold text-white'>
+    You need to be logged in to become an admin!
+    <button class="btn btn-outline-light d-inline m-2"><a class='font-bold' href='/login'>Log-in</a> </button> or
+    <button class="btn btn-outline-light d-inline m-2"><a class='font-bold' href='/signup'>Sign-up</a> </button>
+</div>
+{{/if}}
+
 <div class='mx-auto p-2 m-2 text-white' style='width:500px'>
     {{#if errors}}
     <ul style='list-style=none;'>
@@ -30,13 +38,6 @@
         <li>{{msg}}</li>
         {{/each}}
     </ul>
-    {{else}}
-    <ul style='list-style: none;'>
-        <li>Good to go!</li>
-    </ul>
     {{/if}}
 </div>
 
-{{ else }}
-<h2>You need to Log-in!</h2>
-{{/if}}
