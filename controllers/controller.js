@@ -1,26 +1,32 @@
 const express = require('express')
+const async = require('async')
 const bcrypt = require('bcryptjs')
 const moment = require('moment')
-const async = require('async')
 const { validationResult } = require('express-validator');
 
 const User = require('../models/user')
 const Post = require('../models/post')
 
+
+	/* DISPLAY HOME PAGE */
 exports.get_home = function(req, res) {
 	Post.find()
-        .populate('user')
-        .then((post) => {
-            res.render('index', { title: 'Chad', post });
-    })
+      .populate('user')
+      .then((post) => {
+      	res.render('index', { title: 'Member\'s Only', post });
+      })
 }
 
+
+	/* GET & POST REQUESTS FOR LOGIN */
 exports.login_get = function(req, res) {				
 	res.render('login', { title: 'Log-in' } )
 }
 
 // No need for login_post since the necessary work is done in index.js
 
+
+	/* GET & POST REQUESTS FOR SIGNUP*/
 exports.signup_get = function(req, res) {				
 	res.render('signup', { title: 'Sign-up' })
 }
@@ -34,7 +40,7 @@ exports.signup_post = async function(req, res, next) {
 		return
 	}
 	
-	hashedPassword = await bcrypt.hash(password, 2);
+	hashedPassword = await bcrypt.hash(password, 5);
     const newUser = new User({
       firstName,
       lastName,
@@ -44,11 +50,10 @@ exports.signup_post = async function(req, res, next) {
       admin: false
     });
 
-    console.log(newUser)
     newUser.save(err => {
       if (err) {
         if (err.code === 11000) {
-          return res.redirect("/login");
+          return res.render("/signup", { title: 'Log-in', errors: ['Username Already Exists.'] });
         } else return next(err);
       }
       res.redirect("/login");
@@ -57,6 +62,7 @@ exports.signup_post = async function(req, res, next) {
 }
 
 
+	/* GET & POST REQUESTS FOR NEW POST */
 exports.newpost_get = function(req, res) {				
 	res.render('newPost', { title: 'New Post' })
 }
@@ -64,8 +70,7 @@ exports.newpost_get = function(req, res) {
 
 exports.newpost_post = function(req, res, next) {		
 	const { title, content } = req.body
-	console.log(req.body)
-
+	
 	const errors = validationResult(req)
 	if(!errors.isEmpty()) {
 		res.render('newPost', { title: "New Post", errors: errors.array() })
@@ -80,16 +85,16 @@ exports.newpost_post = function(req, res, next) {
 		timestamp: currentTime
 	})
 
-	console.log(`\n THE POST WAS: \n ${newPost}`)
 	newPost.save(err => {
 		if(err) { return next(err) }
-		res.render('index', { title: "MeMb3r$", post: newPost })
+		res.redirect('/')
 	})
 }
 
 
+	/* GET & POST REQUESTS FOR MEMBER PANEL*/
 exports.members_get = function(req, res) {				
-	res.render('become_member', { title: 'Become a member'})
+	res.render('become_member', { title: 'Become a member' })
 }
 
 exports.members_post = function(req, res) {				
@@ -100,7 +105,7 @@ exports.members_post = function(req, res) {
 			res.render('become_member', { title: 'Become a member', errors: errors.errors })
 			return
 		}
-		console.log(req.body.user)
+
 		const becomeMember = new User({
         	_id: req.user.id,
 			member: true,
@@ -115,10 +120,10 @@ exports.members_post = function(req, res) {
 }
 
 
+	/* GET & POST REQUESTS FOR ADMIN PANEL */
 exports.admins_get = function(req, res) {				
 	res.render('become_admin', { title: 'Become an admin' })
 }
-
 
 exports.admins_post = function(req, res) {				
 	
@@ -145,11 +150,27 @@ exports.admins_post = function(req, res) {
 }
 
 
+	// User Profile
+exports.user_profile = function(req, res) {
+	if(!req.user.id) {
+		res.render('user_profile', { title: 'User Profile', post });
+		return
+	} else {
+	  Post.find({ user: req.user.id })
+      .populate('post')
+      .then((post) => {
+      	res.render('user_profile', { title: 'User Profile', post });
+      })	
+	}
+	
+}
+
+	/* GET REQUEST FOR DELETING MESSAGE */
 exports.delete_get = function(req, res) {				
 
 	const errors = validationResult(req)
 	if(!errors.isEmpty()) {
-		res.render('/', { title: 'ERROR! Become an admin', errors: errors.array() })
+		res.render('/', { title: 'Member\'s Only', errors: errors.array() })
 		return
 	}
 
@@ -159,10 +180,8 @@ exports.delete_get = function(req, res) {
 }
 
 
+	/* REQUEST FOR LOG OUT */
 exports.logout = function(req, res) {					
 	req.logout('/')
 	res.redirect('/login')
 }
-
-
-

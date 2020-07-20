@@ -18,7 +18,7 @@ router.get('/login', controller.login_get)
 router.post(
   '/login',
   passport.authenticate('local', { 
-  	successRedirect: '/new-post',
+  	successRedirect: '/user_profile',
     failureRedirect: '/signup'
   })
 );
@@ -26,17 +26,19 @@ router.post(
 	/* SIGNUP */
 router.get('/signup', controller.signup_get)
 
-router.post('/signup', [
-	check('firstName', 'First name must be at least 2 characters long.')
-		.isLength({ min: 2, max: 20 }).escape(),
-	check('lastName', 'Last name must be at least 2 characters long.')
-		.isLength({ min: 2, max: 20 }).escape(),
-	check('username', 'Username must be at least 4 characters long')
-		.isLength({ min: 4, max: 20 }).escape(),
-	check('password', 'Passowrd must be at least 8 characters long')
-		.isLength({ min: 8, max: 20 }).escape(),
-	check('confirmPassword', 'Passowrd must match.')
-		.custom( (val, {req} ) => val === req.body.password)
+router.post(
+	'/signup',
+	[
+		check('firstName', 'First name must be at least 2 characters long.')
+			.isLength({ min: 2, max: 20 }).escape(),
+		check('lastName', 'Last name must be at least 2 characters long.')
+			.isLength({ min: 2, max: 20 }).escape(),
+		check('username', 'Username must be at least 4 characters long')
+			.isLength({ min: 4, max: 20 }).escape(),
+		check('password', 'Passowrd must be at least 8 characters long')
+			.isLength({ min: 8, max: 20 }).escape(),
+		check('confirmPassword', 'Passowrd must match.')
+			.custom( (val, {req} ) => val === req.body.password)
 	],
 	controller.signup_post
 )
@@ -45,7 +47,9 @@ router.post('/signup', [
 	/* NEW MESSAGE */
 router.get('/new-post', controller.newpost_get)
 
-router.post('/new-post', [
+router.post(
+	'/new-post',
+	[
         check('title', 'Title must be at least 3 characters long')
             .isLength({ min: 3, max: 30 })
             .escape(),
@@ -56,8 +60,7 @@ router.post('/new-post', [
 
 
 	/* MEMBER */
-router.get(
-	'/members',	controller.members_get)
+router.get('/members',	controller.members_get)
 
 router.post(
 	'/members',
@@ -80,8 +83,12 @@ router.post(
 		check('password', "one of the four friends i admire, lowercase only.")
 			.custom( (val, {req} ) => val === req.body.password).escape()
 	],
-	controller.admins_post)
+	controller.admins_post
+)
 
+
+	/* User Profile */
+router.get('/user_profile', controller.user_profile)
 
 	/* DELETE MESSAGE */
 router.get('/:id/delete', controller.delete_get)

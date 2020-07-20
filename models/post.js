@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
+const dateFormat = require("dateformat");
 
 let PostSchema = new Schema ({
 	user: { type: Schema.Types.ObjectId, ref: 'User' },
@@ -7,6 +8,11 @@ let PostSchema = new Schema ({
 	content: { type: String, required: true, minlength: 6 },
 	timestamp: { type: Date, required: true }
 })
+
+// Virtual
+PostSchema.virtual("dateCreated").get(function() {
+  return dateFormat(this.createdAt, "mmmm dS, yyyy, h:MM:ss TT");
+});
 
 // Export
 module.exports = mongoose.model('Post', PostSchema)
