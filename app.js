@@ -9,6 +9,8 @@ const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcryptjs')
 var flash = require('connect-flash');
 const session = require('express-session')
+const compression = require('compression');
+const helmet = require('helmet');
 
 var indexRouter = require('./routes/index');
 
@@ -80,6 +82,9 @@ app.use(function(req, res, next) {
 
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.use(compression()); //Compress all routes
+app.use(helmet());
 
 app.use('/', indexRouter);
 
