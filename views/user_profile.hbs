@@ -60,8 +60,9 @@
 		   {{/each}}
 		{{else}}
 
-		<div class='display-5 text-center text-white font-weight-bold pl-3'>
-			No posts are available at this moment :(
+		<div class='dispay-5 p-3 text-center font-weight-bold text-white'>
+		    You have posted nothing in the club yet!
+		    <button class="btn btn-outline-light d-inline m-2"><a class='font-bold' href='/new-post'>Write a post</a> </button>
 		</div>
 		{{/if}}
 	</div>
@@ -69,7 +70,7 @@
 {{else}}
 
 <div class='dispay-5 p-3 text-center font-weight-bold pl-3 text-white'>
-    You need to be logged in to become an admin!
+    You need to be logged in!
     <button class="btn btn-outline-light d-inline m-2"><a class='font-bold' href='/login'>Log-in</a> </button> or
     <button class="btn btn-outline-light d-inline m-2"><a class='font-bold' href='/signup'>Sign-up</a> </button>
 </div>

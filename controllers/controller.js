@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require('express')
 const async = require('async')
 const bcrypt = require('bcryptjs')
@@ -13,7 +14,7 @@ exports.get_home = function(req, res) {
 	Post.find()
       .populate('user')
       .then((post) => {
-      	res.render('index', { title: 'Member\'s Only', post });
+      	res.render('index', { title: 'Member\'s Only', post: post.reverse() });
       })
 }
 
@@ -64,7 +65,7 @@ exports.signup_post = async function(req, res, next) {
 
 	/* GET & POST REQUESTS FOR NEW POST */
 exports.newpost_get = function(req, res) {				
-	res.render('newPost', { title: 'New Post' })
+	res.render('new_post', { title: 'New Post' })
 }
 
 
@@ -73,7 +74,7 @@ exports.newpost_post = function(req, res, next) {
 	
 	const errors = validationResult(req)
 	if(!errors.isEmpty()) {
-		res.render('newPost', { title: "New Post", errors: errors.array() })
+		res.render('new_post', { title: "New Post", errors: errors.array() })
 		return
 	}
 
@@ -98,7 +99,7 @@ exports.members_get = function(req, res) {
 }
 
 exports.members_post = function(req, res) {				
-	if(req.body.password === 'bruhmintosh') {
+	if(process.env.MEMBER_PASSWORD === req.body.password) {
 
 		const errors = validationResult(req)
 		if(!errors.isEmpty()){
@@ -126,10 +127,8 @@ exports.admins_get = function(req, res) {
 }
 
 exports.admins_post = function(req, res) {				
-	
-	const UwU = ['sarvesh', 'pratik', 'devesh', 'rahul']
-	
-	if(UwU.includes(req.body.password)) {
+		
+	if(process.env.ADMIN_PASSWORD.includes(req.body.password)) {
 		const errors = validationResult(req)
 		if(!errors.isEmpty()) {
 			res.render('become_admin', { title: 'Become an admin', errors: errors.array() })
@@ -152,14 +151,14 @@ exports.admins_post = function(req, res) {
 
 	// User Profile
 exports.user_profile = function(req, res) {
-	if(!req.user.id) {
-		res.render('user_profile', { title: 'User Profile', post });
+	if(!req.user) {
+		res.render('user_profile', { title: 'User Profile' });
 		return
 	} else {
 	  Post.find({ user: req.user.id })
       .populate('post')
       .then((post) => {
-      	res.render('user_profile', { title: 'User Profile', post });
+      	res.render('user_profile', { title: 'User Profile', post: post.reverse() });
       })	
 	}
 	
