@@ -59,6 +59,8 @@ passport.deserializeUser(function (id, done) {
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 
+app.use(express.static(path.join(__dirname, '/public')))
+
 // Using individual middlewares
 app.use(logger('dev'));
 app.use(express.json());

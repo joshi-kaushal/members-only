@@ -18,4 +18,4 @@
 </ul>
 
 ### Here is a live demo:
-*(coming soon)*
+<a href="https://express-members-club.herokuapp.com/">Live Demo</a>
