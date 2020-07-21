@@ -22,7 +22,7 @@ var app = express();
 // MongoDB connection
 var dev_db_url = 'mongodb+srv://jk_facebook-clone:quHAYe2Z9RD2Vckj@cluster0.djwid.mongodb.net/private?retryWrites=true&w=majority'
 const mongoDB = process.env.MONGODB_URI || dev_db_url;
-mongoose.connect(mongoDb, { useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true});
 const db = mongoose.connection
 db.on('error', console.error.bind(console, 'MongoDB connection error:'))
 mongoose.set('useFindAndModify', false);
