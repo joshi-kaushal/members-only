@@ -37,7 +37,7 @@ exports.signup_post = async function(req, res, next) {
 	const errors = validationResult(req)
 
 	if(!errors.isEmpty()) {
-		res.render('signup', { errors: errors.errors })
+		res.render('signup', { title: "Sign-up", errors: errors.errors })
 		return
 	}
 	
@@ -70,11 +70,11 @@ exports.newpost_get = function(req, res) {
 
 
 exports.newpost_post = function(req, res, next) {		
-	const { title, content } = req.body
-	
+	const { title, content } = req.body	
 	const errors = validationResult(req)
+
 	if(!errors.isEmpty()) {
-		res.render('new_post', { title: "New Post", errors: errors.array() })
+		res.render('new_post', { title: "New Post", errors: errors.errors })
 		return
 	}
 
@@ -99,25 +99,20 @@ exports.members_get = function(req, res) {
 }
 
 exports.members_post = function(req, res) {				
-	if(process.env.MEMBER_PASSWORD === req.body.password) {
-
-		const errors = validationResult(req)
-		if(!errors.isEmpty()){
-			res.render('become_member', { title: 'Become a member', errors: errors.errors })
-			return
-		}
-
-		const becomeMember = new User({
-        	_id: req.user.id,
-			member: true,
-		})
-
-		User.findByIdAndUpdate(req.user.id, becomeMember).then((updated) => {
-			res.redirect('/')
-		})
-	} else {
-		res.render('become_member', { title: 'become a member', errors: ['wrong password!', 'tried bruhmintosh?'] })
+	const errors = validationResult(req)
+	if(!errors.isEmpty()){
+		res.render('become_member', { title: 'Become a member', errors: errors.errors })
+		return
 	}
+
+	const becomeMember = new User({
+        _id: req.user.id,
+		member: true,
+	})
+
+	User.findByIdAndUpdate(req.user.id, becomeMember).then((updated) => {
+		res.redirect('/')
+	})
 }
 
 
@@ -126,26 +121,22 @@ exports.admins_get = function(req, res) {
 	res.render('become_admin', { title: 'Become an admin' })
 }
 
-exports.admins_post = function(req, res) {				
-		
-	if(process.env.ADMIN_PASSWORD.includes(req.body.password)) {
-		const errors = validationResult(req)
-		if(!errors.isEmpty()) {
-			res.render('become_admin', { title: 'Become an admin', errors: errors.array() })
-			return
-		}
-
-		const becomeAdmin = new User ({
-        	_id: req.user.id,
-			admin: true
-		})
-
-		User.findByIdAndUpdate(req.user.id, becomeAdmin).then(updated => {
-			res.redirect('/')
-		})
-	} else {
-		res.render('become_admin', { title: 'become an admin', errors: ['it\'s one of the friends i admire most', 'just NAME', 'totally in lowercase', 'UwU'] })
+exports.admins_post = function(req, res) {
+	const errors = validationResult(req)
+	if(!errors.isEmpty()) {
+		res.render('become_admin', { title: 'Become an admin', errors: errors.errors, hint: ['one of the four friends I admire most', 'all lowercase'] })
+		return
 	}
+
+	const becomeAdmin = new User ({
+       	_id: req.user.id,
+		admin: true
+	})
+
+	User.findByIdAndUpdate(req.user.id, becomeAdmin).then(updated => {
+		res.redirect('/')
+	})
+	
 }
 
 

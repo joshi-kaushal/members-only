@@ -31,7 +31,13 @@
     {{#if errors}}
     <ul style='list-style=none;'>
         {{#each errors}}
-        <li class='text-danger'>{{this}}</li>
+        <li class='text-danger'>{{{msg}}}</li>
+        {{/each}}
+    </ul>
+
+    <ul style='list-style=none;'>
+        {{#each hint}}
+        <li class='text-danger'>{{{this}}}</li>
         {{/each}}
     </ul>
     {{/if}}

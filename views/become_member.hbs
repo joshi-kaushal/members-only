@@ -34,14 +34,8 @@
     {{#if errors}}
     <ul style='list-style=none;'>
         {{#each errors}}
-        <li class='text-danger'>{{this}}</li>
+         <li class='text-danger'>{{msg}}</li>
         {{/each}}
     </ul>
     {{/if}}
 </div>
-
-<script type="text/javascript">
-    Handlebars.registerHelper('isdefined', function (value) {
-        return value !== undefined;
-    });
-</script>

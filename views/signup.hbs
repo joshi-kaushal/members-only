@@ -3,7 +3,7 @@
 </div>
 
 <div class='rounded border border-light mx-auto p-2 m-2' style='width:500px'>
-  <form class="form font-weight-bold text-white text-uppercase text-center" action="" method="POST">
+  <form class="form font-weight-bold text-white text-white-uppercase text-center" method="POST">
     <div class="form-group">
       <label for='firstName'>First name:</label>
       <input type="text" name="firstName" id="firstName" class="form-control" {{ fields.firstName }}>
@@ -34,10 +34,11 @@
 
 
 <div class='mx-auto p-2 m-2 text-white' style='width:500px'>
-{{#if errors}}
-  <ul style='list-style=none;'>
-  {{#each errors}}
-    <li class='text-danger'>{{this}}</li>
-  {{/each}}
-  </ul>
-{{/if}}
+  {{#if errors}}
+    <ul style='list-style=none;'>
+      {{#each errors}}
+        <li class='text-danger'>{{msg}}</li>
+      {{/each}}
+    </ul>
+  {{/if}}
+</div>
