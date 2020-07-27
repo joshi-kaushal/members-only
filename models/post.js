@@ -11,7 +11,7 @@ let PostSchema = new Schema ({
 
 // Virtual
 PostSchema.virtual("dateCreated").get(function() {
-  return dateFormat(this.createdAt, "mmmm dS, yyyy, h:MM:ss TT");
+  return dateFormat(this.timestamp, "mmmm dS, yyyy, h:MM:ss TT");
 });
 
 // Export
