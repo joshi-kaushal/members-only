@@ -3,6 +3,7 @@ const express = require('express')
 const async = require('async')
 const bcrypt = require('bcryptjs')
 const moment = require('moment')
+var session = require('express-session')
 const { validationResult } = require('express-validator');
 
 const User = require('../models/user')
@@ -173,5 +174,7 @@ exports.delete_get = function(req, res) {
 	/* REQUEST FOR LOG OUT */
 exports.logout = function(req, res) {					
 	req.logout('/')
+	req.session.destroy();
+	req.session = null 
 	res.redirect('/login')
 }
