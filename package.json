@@ -23,7 +23,7 @@
     "hbs": "^4.1.1",
     "helmet": "^3.23.3",
     "http-errors": "~1.6.3",
-    "moment": "^2.27.0",
+    "moment": "^2.29.2",
     "mongoose": "^5.9.24",
     "morgan": "~1.9.1",
     "passport": "^0.4.1",
